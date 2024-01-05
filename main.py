@@ -59,7 +59,7 @@ TEXT:\n
 
 def convert_to_ddmmyy(date_str):
     try:
-        for fmt in ("%Y-%m-%d", "%d/%m/%Y", "%m/%d/%Y"):
+        for fmt in ("%d-%m-%Y", "%d/%m/%Y", "%d-%m-%y", "%d/%m/%y"):
             try:
                 dt = datetime.strptime(date_str, fmt)
                 return dt.strftime("%d/%m/%y")
