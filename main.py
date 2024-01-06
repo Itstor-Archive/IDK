@@ -39,30 +39,30 @@ RULES:
 - If you do not find it in the text, set it as null.
 - You must obey the format.
 - The JSON Value MUST be in English.
-- The date must be in DD/MM/YY. No text allowed.
+- The date must be in dd/MM/yyyy. No text allowed.
 
 JSON FORMAT:
 {
 "name": "name of the person",
 "lastEducationInstitution": "last education institution",
-"lastEducationDegree": "last education degree. The format MUST be, "Bachelor of ...", "Master of ...", "Doctor of ...", etc",
-"lastEducationMajor": "last education major",
-"lastEducationStartDate": "The format MUST be in DD/MM/YYYY. Text NOT allowed",
-"lastEducationEndDate": "The format MUST be in DD/MM/YYYY. Text NOT allowed",
+"lastEducationDegree": "The format MUST be, "Bachelor of ...", "Master of ...", "Doctor of ...", etc. For example, "Bachelor of Computer Science".",
+"lastEducationMajor": "Last Education Major. For example, "Computer Science".",
+"lastEducationStartDate": "The format MUST be in dd/MM/yyyy. Text NOT allowed. For example, "01/01/2010"",
+"lastEducationEndDate": "The format MUST be in dd/MM/yyyy. Text NOT allowed. For example, "01/01/2014"",
 "skills": ["list of skill"],
-"birthday": "person birthday in DD/MM/YYYY format"
+"birthday": "person birthday in dd/MM/yyyy format. Text NOT allowed. For example, "01/01/1990"
 }
 
 TEXT:\n
 """
 
 
-def convert_to_ddmmyy(date_str):
+def convert_to_iso(date_str):
     try:
         for fmt in ("%d-%m-%Y", "%d/%m/%Y", "%d-%m-%y", "%d/%m/%y"):
             try:
                 dt = datetime.strptime(date_str, fmt)
-                return dt.strftime("%d/%m/%y")
+                return dt.date().isoformat()
             except ValueError:
                 continue
         return None
@@ -70,9 +70,9 @@ def convert_to_ddmmyy(date_str):
         return None
     
 def reformatted_json(json):
-    json["lastEducationStartDate"] = convert_to_ddmmyy(json["lastEducationStartDate"])
-    json["lastEducationEndDate"] = convert_to_ddmmyy(json["lastEducationEndDate"])
-    json["birthday"] = convert_to_ddmmyy(json["birthday"])
+    json["lastEducationStartDate"] = convert_to_iso(json["lastEducationStartDate"])
+    json["lastEducationEndDate"] = convert_to_iso(json["lastEducationEndDate"])
+    json["birthday"] = convert_to_iso(json["birthday"])
 
     for key, value in json.items():
         if value == "null" or value == "Null" or value == "NULL":
